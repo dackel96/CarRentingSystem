@@ -1,16 +1,44 @@
-﻿<form>
-    <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+﻿@model AddCarFormModel
+
+@{
+    ViewData["Title"] = "Add Car";
+}
+
+<div class="row">
+    <div class="col-lg-8 col-sm-12 offset-lg-2 offset-xl-3 col-xl-6">
+        <h2 class="heading-margins text-center">Add Car</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label asp-for="Brand"></label>
+                <input asp-for="Brand" class="form-control" placeholder="VW,BMW,LEXUS,etc...">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Model"></label>
+                <input asp-for="Model" class="form-control" placeholder="Golf,M5,IS200,etc...">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" rows="4" class="form-control" placeholder="This is great car for offroad vacantion..."></textarea>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ImageUrl"></label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="Place URL here">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Year"></label>
+                <input asp-for="Year" class="form-control" placeholder="@DateTime.UtcNow.Year">
+            </div>
+            <div>
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId">
+                    @foreach(var category in Model.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+            </div>
+            <hr /> 
+            <input class="btn btn-primary" type="submit" value="Save" />
+        </form>
     </div>
-    <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-    </div>
-    <select class="form-select" aria-label="Default select example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-    </select>
-</form>
+</div>

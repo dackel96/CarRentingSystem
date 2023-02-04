@@ -1,12 +1,18 @@
-﻿using CarRentingSystem.Models.Cars;
+﻿using CarRentingSystem.Data;
+using CarRentingSystem.Models.Cars;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentingSystem.Controllers
 {
     public class CarsController : Controller
     {
-        [HttpGet]
-        public IActionResult Add() => View();
+        private readonly ApplicationDbContext data;
+
+  
+        public IActionResult Add() => View(new AddCarFormModel
+        {
+            Categories = this.GetCarCategories()
+        });
 
         [HttpPost]
         public IActionResult Add(AddCarFormModel car)
@@ -14,5 +20,15 @@ namespace CarRentingSystem.Controllers
 
             return View();
         }
+
+        private IEnumerable<CarCategoryViewModel> GetCarCategories()
+            => this.data
+            .Categories
+            .Select(c => new CarCategoryViewModel
+            {
+                Id = c.Id,
+                Name = c.Name
+            })
+            .ToList();
     }
 }
