@@ -35,12 +35,13 @@
             </div>
             <div>
                 <label asp-for="CategoryId"></label>
-                <select asp-for="CategoryId">
+                <select asp-for="CategoryId" class="form-select" aria-label="Default select example">
                     @foreach(var category in Model.Categories)
                     {
                         <option value="@category.Id">@category.Name</option>
                     }
                 </select>
+                <span asp-validation-for="CategoryId" class="small text-danger"></span>
             </div>
             <hr /> 
             <input class="btn btn-primary" type="submit" value="Save" />
