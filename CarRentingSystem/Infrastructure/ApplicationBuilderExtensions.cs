@@ -1,4 +1,4 @@
-﻿using CarRentingSystem.Data;
+﻿ using CarRentingSystem.Data;
 using CarRentingSystem.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,10 +25,10 @@ namespace CarRentingSystem.Infrastructure
 
         private static void SeedCategories(ApplicationDbContext data)
         {
-            //if (data.Categories.Any())
-            //{
-            //    return;
-            //}
+            if (data.Categories.Any())
+            {
+                return;
+            }
 
             data.Categories.AddRange(new[]
             {
