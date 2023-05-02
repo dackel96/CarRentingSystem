@@ -49,11 +49,35 @@ namespace CarRentingSystem.Controllers
             return RedirectToAction(nameof(All));
         }
 
-        public IActionResult All()
+        public IActionResult All([FromQuery] AllCarsQueryModel query)
         {
-            var cars = this.data
-                .Cars
-                .OrderByDescending(c => c.Id)
+
+            var carsQuery = this.data.Cars.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.Brand))
+            {
+                carsQuery = carsQuery.Where(x => x.Brand == query.Brand);
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                carsQuery = carsQuery.Where(x =>
+                    (x.Brand + " " + x.Model).ToLower().Contains(query.SearchTerm.ToLower())
+                    || x.Description.ToLower().Contains(query.SearchTerm.ToLower()));
+            }
+
+            carsQuery = query.Sorting switch
+            {
+                CarSorting.Year => carsQuery.OrderByDescending(x => x.Year),
+                CarSorting.BrandAndModel => carsQuery.OrderBy(x => x.Brand).ThenBy(x => x.Model),
+                CarSorting.DateCreated or _ => carsQuery.OrderByDescending(x => x.Id)
+            };
+
+            var totalCars = carsQuery.Count();
+
+            var cars = carsQuery
+                .Skip((query.CurrentPage - 1) * AllCarsQueryModel.CarsPerPage)
+                .Take(AllCarsQueryModel.CarsPerPage)
                 .Select(c => new CarListingViewModel()
                 {
                     Id = c.Id,
@@ -65,7 +89,19 @@ namespace CarRentingSystem.Controllers
                 })
                 .ToList();
 
-            return View(cars);
+            var carBrands = this.data
+                .Cars
+                .Select(x => x.Brand)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+
+            query.TotalCars = totalCars;
+            query.Brands = carBrands;
+            query.Cars = cars;
+
+            return View(query);
         }
 
         private IEnumerable<CarCategoryViewModel> GetCarCategories()

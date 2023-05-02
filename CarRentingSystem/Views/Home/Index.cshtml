@@ -1,13 +1,15 @@
-﻿@model List<CarListingViewModel>
+﻿@model IndexViewModel
 
 @{
-    var firstCar = Model.Any() ? Model[0] : null;
-    var secondCar = Model.Count > 1 ? Model[1] : null;
-    var thirdCar = Model.Count > 2 ? Model[2] : null;
+    var cars = Model.Cars;
+
+    var firstCar = cars.Any() ? cars[0] : null;
+    var secondCar = cars.Count > 1 ? cars[1] : null;
+    var thirdCar = cars.Count > 2 ? cars[2] : null;
 }
 
 @{
-    if (!Model.Any())
+    if (!cars.Any())
     {
         <div class="h-100 p-5 text-bg-dark rounded-3">
             <h2>Welcome to the Car Renting System</h2>
@@ -17,7 +19,7 @@
     }
 }
 
-<div id="carouselExample" class="carousel slide">
+<div id="carouselExample" class="carousel slide mt-5">
     <div class="carousel-inner">
         <div class="carousel-item active">
             <img src="@firstCar.ImageUrl" class="d-block w-100" alt="...">
@@ -46,4 +48,18 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
+</div>
+
+<div class="jumbotron bg-secondary mt-5">
+    <div class="row">
+        <h2 class="col-md-4 text-center">
+            @Model.TotalCars Cars
+        </h2>
+        <h2 class="col-md-4 text-center">
+            @Model.TotalUsers Users
+        </h2>
+        <h2 class="col-md-4 text-center">
+            @Model.TotalRents Rents
+        </h2>
+    </div>
 </div>
