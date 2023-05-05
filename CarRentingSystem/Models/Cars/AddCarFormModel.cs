@@ -22,7 +22,7 @@ namespace CarRentingSystem.Models.Cars
         [Display(Name = "Image URL")]
         public string ImageUrl { get; init; } = null!;
 
-        [Range(CarYearMinValue,CarYearMaxValue)]
+        [Range(YearMinValue,YearMaxValue)]
         public int Year { get; init; }
 
         [Display(Name = "Category")]

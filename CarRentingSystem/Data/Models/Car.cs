@@ -28,5 +28,9 @@ namespace CarRentingSystem.Data.Models
         [Required]
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; init; } = null!;
+
+        public int DealerId { get; init; }
+
+        public Dealer? Dealer { get; init; }
     }
 }

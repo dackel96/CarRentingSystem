@@ -15,10 +15,22 @@
             public const int DescriptionMinLength = 10;
 
 
-            public const int CarYearMinValue = 2000;
-            public const int CarYearMaxValue = 2050;
+            public const int YearMinValue = 2000;
+            public const int YearMaxValue = 2050;
 
 
+        }
+
+        public static class CategoryConstants
+        {
+            public const int NameMaxLength = 25;
+        }
+
+        public static class DealerConstants
+        {
+            public const int NameMaxLength = 25;
+
+            public const int PhoneNumberMaxLength = 20;
         }
     }
 }
