@@ -1,9 +1,12 @@
 ﻿using CarRentingSystem.Data;
 using CarRentingSystem.Data.Models;
+using CarRentingSystem.Infrastructure;
 using CarRentingSystem.Models;
 using CarRentingSystem.Models.Cars;
 using CarRentingSystem.Services.Cars;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarRentingSystem.Controllers
 {
@@ -18,15 +21,35 @@ namespace CarRentingSystem.Controllers
             this.data = data;
         }
 
-
-        public IActionResult Add() => View(new AddCarFormModel
+        [Authorize]
+        public IActionResult Add()
         {
-            Categories = this.GetCarCategories()
-        });
+            if (!this.UserIsDealer())
+            {
+                return RedirectToAction(nameof(DealersController.Create), "Dealers");
+            }
+
+            return View(new AddCarFormModel
+            {
+                Categories = this.GetCarCategories()
+            });
+        }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddCarFormModel car)
         {
+            var dealerId = this.data
+                .Dealers
+                .Where(x => x.UserId == this.User.GetId())
+                .Select(x => x.Id)
+                .FirstOrDefault();
+
+            if (dealerId == 0)
+            {
+                return RedirectToAction(nameof(DealersController.Create), "Dealers");
+            }
+
             if (!this.data.Categories.Any(c => c.Id == car.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(car.CategoryId), "Category does not exist.");
@@ -46,7 +69,8 @@ namespace CarRentingSystem.Controllers
                 Description = car.Description,
                 ImageUrl = car.ImageUrl,
                 Year = car.Year,
-                CategoryId = car.CategoryId
+                CategoryId = car.CategoryId,
+                DealerId = dealerId
             };
 
             this.data.Cars.Add(carData);
@@ -84,5 +108,10 @@ namespace CarRentingSystem.Controllers
                 Name = c.Name
             })
             .ToHashSet();
+
+        private bool UserIsDealer()
+            => this.data
+                .Dealers
+                .Any(x => x.UserId == this.User.GetId());
     }
 }

@@ -48,6 +48,7 @@ namespace CarRentingSystem.Services.Cars
                     Id = c.Id,
                     Brand = c.Brand,
                     Model = c.Model,
+                    Description = c.Description,
                     ImageUrl = c.ImageUrl,
                     Year = c.Year,
                     Category = c.Category.Name

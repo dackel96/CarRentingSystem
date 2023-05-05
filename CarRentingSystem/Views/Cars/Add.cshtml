@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-lg-8 col-sm-12 offset-lg-2 offset-xl-3 col-xl-6">
-        <h2 class="heading-margins text-center">Add Car</h2>
+        <h2 class="heading-margins text-center">@ViewData["Title"]</h2>
         <form method="post">
             <div class="mb-3">
                 <label asp-for="Brand"></label>
@@ -25,7 +25,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="ImageUrl"></label>
-                <input asp-for="ImageUrl" class="form-control" placeholder="Place URL here"> 
+                <input asp-for="ImageUrl" class="form-control" placeholder="Place URL here">
                 <span asp-validation-for="ImageUrl" class="small text-danger"></span>
             </div>
             <div class="mb-3">
@@ -36,14 +36,14 @@
             <div>
                 <label asp-for="CategoryId"></label>
                 <select asp-for="CategoryId" class="form-select" aria-label="Default select example">
-                    @foreach(var category in Model.Categories)
+                    @foreach (var category in Model.Categories)
                     {
                         <option value="@category.Id">@category.Name</option>
                     }
                 </select>
                 <span asp-validation-for="CategoryId" class="small text-danger"></span>
             </div>
-            <hr /> 
+            <hr />
             <input class="btn btn-primary" type="submit" value="Save" />
         </form>
     </div>
