@@ -2,6 +2,16 @@
 {
     public static class DataConstants
     {
+
+        public static class UserConstants
+        {
+            public const int FullNameLength = 50;
+            public const int FullNameMinLength = 5;
+
+            public const int PasswordLength = 100;
+            public const int PasswordMinLength = 6;
+
+        }
         public static class CarConstants
         {
             public const int BrandMaxLength = 20;
