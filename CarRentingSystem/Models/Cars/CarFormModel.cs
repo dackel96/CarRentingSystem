@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using CarRentingSystem.Services.Cars;
 using static CarRentingSystem.Data.DataConstants.CarConstants;
 
 namespace CarRentingSystem.Models.Cars
 {
-    public class AddCarFormModel
+    public class CarFormModel
     {
         [Required]
         [StringLength(BrandMaxLength, MinimumLength = BrandMinLength)]
@@ -28,7 +29,7 @@ namespace CarRentingSystem.Models.Cars
         [Display(Name = "Category")]
         public int CategoryId { get; init; }
 
-        public IEnumerable<CarCategoryViewModel> Categories { get; set; } = new HashSet<CarCategoryViewModel>();
+        public IEnumerable<CarCategoryServiceModel> Categories { get; set; } = new HashSet<CarCategoryServiceModel>();
     }
 }
 
