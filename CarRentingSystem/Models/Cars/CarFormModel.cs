@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using CarRentingSystem.Services.Cars;
+using CarRentingSystem.Services.Cars.Models;
 using static CarRentingSystem.Data.DataConstants.CarConstants;
 
 namespace CarRentingSystem.Models.Cars

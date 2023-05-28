@@ -5,6 +5,7 @@ using CarRentingSystem.Services.Cars;
 using CarRentingSystem.Services.Dealers;
 using CarRentingSystem.Services.Statistics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,12 @@ builder.Services.AddDefaultIdentity<User>(options =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+});
 
 builder.Services.AddTransient<IStatisticsService, StatisticsService>();
 builder.Services.AddTransient<ICarService, CarService>();
@@ -55,9 +61,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapDefaultRoute();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

@@ -1,4 +1,5 @@
-﻿using CarRentingSystem.Infrastructure;
+﻿using AutoMapper;
+using CarRentingSystem.Infrastructure;
 using CarRentingSystem.Models.Cars;
 using CarRentingSystem.Services.Cars;
 using CarRentingSystem.Services.Dealers;
@@ -11,13 +12,16 @@ namespace CarRentingSystem.Controllers
     {
         private readonly ICarService cars;
         private readonly IDealerService dealers;
+        private readonly IMapper mapper;
 
         public CarsController(
             ICarService cars,
-            IDealerService dealers)
+            IDealerService dealers,
+            IMapper mapper)
         {
             this.cars = cars;
             this.dealers = dealers;
+            this.mapper = mapper;
         }
 
         [Authorize]
@@ -101,7 +105,7 @@ namespace CarRentingSystem.Controllers
         {
             var userId = this.User.GetId();
 
-            if (!dealers.IsDealer(userId) || !User.IsAdmin())
+            if (!dealers.IsDealer(userId) && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(DealersController.Create), "Dealers");
             }
@@ -113,16 +117,11 @@ namespace CarRentingSystem.Controllers
                 return Unauthorized();
             }
 
-            return View(new CarFormModel
-            {
-                Brand = car.Brand!,
-                Model = car.Model!,
-                Description = car.Description!,
-                ImageUrl = car.ImageUrl!,
-                Year = car.Year,
-                CategoryId = car.CategoryId,
-                Categories = this.cars.AllCarCategories()
-            });
+            var carForm = this.mapper.Map<CarFormModel>(car);
+
+            carForm.Categories = this.cars.AllCarCategories();
+
+            return View(carForm);
         }
 
         [HttpPost]
@@ -131,7 +130,7 @@ namespace CarRentingSystem.Controllers
         {
             var dealerId = this.dealers.GetIdByUser(this.User.GetId());
 
-            if (dealerId == 0 || !User.IsAdmin())
+            if (dealerId == 0 && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(DealersController.Create), "Dealers");
             }

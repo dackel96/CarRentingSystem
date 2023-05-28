@@ -1,17 +1,22 @@
-﻿using CarRentingSystem.Models.Api.Cars;
-using CarRentingSystem.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+﻿using CarRentingSystem.Models;
 using CarRentingSystem.Data;
 using CarRentingSystem.Data.Models;
+using CarRentingSystem.Services.Cars.Models;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 namespace CarRentingSystem.Services.Cars
 {
     public class CarService : ICarService
     {
         private readonly ApplicationDbContext data;
+        private readonly IMapper mapper;
 
-        public CarService(ApplicationDbContext data)
-            => this.data = data;
+        public CarService(ApplicationDbContext data, IMapper mapper)
+        {
+            this.data = data;
+            this.mapper = mapper;
+        }
 
         public CarQueryServiceModel All(
             string brand,
@@ -96,19 +101,7 @@ namespace CarRentingSystem.Services.Cars
              => this.data
                 .Cars
                 .Where(x => x.Id == carId)
-                .Select(x => new CarDetailsServiceModel
-                {
-                    Id = x.Id,
-                    Brand = x.Brand,
-                    Model = x.Model,
-                    Description = x.Description,
-                    ImageUrl = x.ImageUrl,
-                    Year = x.Year,
-                    CategoryName = x.Category!.Name,
-                    DealerId = x.DealerId,
-                    DealerName = x.Dealer!.Name,
-                    UserId = x.Dealer.UserId
-                })
+                .ProjectTo<CarDetailsServiceModel>(this.mapper.ConfigurationProvider)
             .FirstOrDefault()!;
 
         public bool CategoryExists(int categoryId)

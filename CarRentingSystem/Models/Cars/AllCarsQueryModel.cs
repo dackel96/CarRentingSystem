@@ -1,4 +1,4 @@
-﻿using CarRentingSystem.Services.Cars;
+﻿using CarRentingSystem.Services.Cars.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace CarRentingSystem.Models.Cars
